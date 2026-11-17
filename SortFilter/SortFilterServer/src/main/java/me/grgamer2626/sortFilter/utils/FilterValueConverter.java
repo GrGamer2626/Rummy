@@ -3,6 +3,7 @@ package me.grgamer2626.sortFilter.utils;
 import me.grgamer2626.sortFilter.exception.InvalidFilterValueException;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -61,7 +62,13 @@ public final class FilterValueConverter {
 			return toEnum(targetType, text);
 		}
 		if (targetType == Boolean.class || targetType == boolean.class) {
-			return Boolean.parseBoolean(text);
+			if ("true".equalsIgnoreCase(text)) {
+				return true;
+			}
+			if ("false".equalsIgnoreCase(text)) {
+				return false;
+			}
+			throw new IllegalArgumentException("Not a boolean: " + text);
 		}
 		if (targetType == Long.class || targetType == long.class) {
 			return rawValue instanceof Number number ? number.longValue() : Long.parseLong(text);
@@ -74,6 +81,9 @@ public final class FilterValueConverter {
 		}
 		if (targetType == BigDecimal.class) {
 			return new BigDecimal(text);
+		}
+		if (targetType == Instant.class) {
+			return Instant.parse(text);
 		}
 		if (targetType == LocalDate.class) {
 			return LocalDate.parse(text);
