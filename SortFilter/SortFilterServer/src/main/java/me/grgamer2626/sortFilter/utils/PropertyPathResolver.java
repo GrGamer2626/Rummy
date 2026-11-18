@@ -44,21 +44,18 @@ public final class PropertyPathResolver {
 			String segment = segments[i];
 			boolean isLastSegment = i == segments.length - 1;
 			Field field = findField(currentType, segment, property);
+			boolean isCollection = Collection.class.isAssignableFrom(field.getType());
 
-			if (Collection.class.isAssignableFrom(field.getType())) {
-				From<?, ?> joined = currentFrom.join(segment);
-				if (isLastSegment) {
-					return joined;
-				}
-				currentFrom = joined;
-				currentType = resolveCollectionElementType(field, property);
-			} else {
-				if (isLastSegment) {
-					return currentFrom.get(segment);
-				}
-				currentFrom = (From<?, ?>) currentFrom.get(segment);
-				currentType = field.getType();
+			if (isLastSegment && !isCollection) {
+				return currentFrom.get(segment);
 			}
+
+			From<?, ?> joined = currentFrom.join(segment);
+			if (isLastSegment) {
+				return joined;
+			}
+			currentFrom = joined;
+			currentType = isCollection ? resolveCollectionElementType(field, property) : field.getType();
 		}
 
 		throw new InvalidPropertyException("Filter property '" + property + "' could not be resolved");
