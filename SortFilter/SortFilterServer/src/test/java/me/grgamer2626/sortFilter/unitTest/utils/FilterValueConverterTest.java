@@ -1,7 +1,8 @@
-package me.grgamer2626.sortFilter.utils;
+package me.grgamer2626.sortFilter.unitTest.utils;
 
 import me.grgamer2626.sortFilter.testUtils.TestEnum;
 import me.grgamer2626.sortFilter.exception.InvalidFilterValueException;
+import me.grgamer2626.sortFilter.utils.FilterValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
